@@ -1,5 +1,9 @@
 # EisenhowerMatrix - Eisenhower Decision Matrix, or Urgent-Important Matrix UrgentImportantMatrix
-Tool helps to prioritize work based on urgency &amp; importance/business value.    Developed based on Eisenhower Matrix also known as Eisenhower Box, Eisenhower Decision Matrix,   Features - no installation required,  no database is required. Just download single html file &amp; start using tool.
+Tool helps to prioritize work based on urgency &amp; importance/business value. Developed based on Eisenhower Matrix also known as Eisenhower Box, Eisenhower Decision Matrix,   Features - no installation required,  no database is required. Just download single html file &amp; start using tool.
+
+## Getting Started
+
+By downloading single file "SingleFileEisenhowerMatrix.html" user can start using this tool.
 
 As per Wikipedia -  The "Eisenhower Method"[11] or "Eisenhower Principle" is a method that utilizes the principles
 of importance and urgency to organize priorities and workload. This method stems from a quote attributed to Dwight D. Eisenhower:
