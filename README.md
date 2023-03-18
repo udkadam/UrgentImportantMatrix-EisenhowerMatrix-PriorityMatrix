@@ -5,6 +5,7 @@ Tool helps to prioritize work based on urgency &amp; importance/business value. 
 
 By downloading single file "SingleFileEisenhowerMatrix.html" user can start using this tool.
 
+Important Note - This tool uses browser local storage. Clearing browser history will clear tasks data. Before clearing browser history user must backup  data by using download/export option on top right corner. User can import this data in tool by using "settings" option on top righ corner.
 
 ## More Information - Inspiration
 
