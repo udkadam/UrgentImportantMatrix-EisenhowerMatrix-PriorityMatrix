@@ -5,6 +5,9 @@ Tool helps to prioritize work based on urgency &amp; importance/business value. 
 
 By downloading single file "SingleFileEisenhowerMatrix.html" user can start using this tool.
 
+
+## More Information - Inspiration
+
 As per Wikipedia -  The "Eisenhower Method"[11] or "Eisenhower Principle" is a method that utilizes the principles
 of importance and urgency to organize priorities and workload. This method stems from a quote attributed to Dwight D. Eisenhower:
 "I have two kinds of problems, the urgent and the important. The urgent are not important, and the important are never
@@ -15,7 +18,7 @@ Priority matrix: Eisenhower Matrix, this is also known as Eisenhower Box, Eisenh
 This methodology helps to prioritize work based on urgency and importance/business value.
 It helps to determine important activities vs activities which may not need your attention at all.
 The brain behind the famous Eisenhower Box is <a  target="_blank"  href="https://en.wikipedia.org/wiki/Dwight_D._Eisenhower">Dwight D. Eisenhower. </a>        
-
+## Too Usage Guide
 
 <img width="768" alt="Eisenhower Matrix 2" src="https://user-images.githubusercontent.com/306496/226131407-793742d3-580c-44c0-9d69-8ef154d4b9a2.png">
 
