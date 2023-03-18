@@ -29,7 +29,7 @@ On click of task, you can see task details and perform further operations e.g. a
 
 1. Export backup of tasks to json file
 2. Import from json file
-3. User can switch between different modes with selectbox from header ( top left corner)
+3. User can switch between different modes (show only my tasks, show all tasks, show only follow up tasks) with selectbox from header ( top left corner)
 4. Summary of number of tasks, sum of estimated time is displayed in header (top right corner)
 5. Followup activities, on hold activities are indicated with different colors for easy identification
 
