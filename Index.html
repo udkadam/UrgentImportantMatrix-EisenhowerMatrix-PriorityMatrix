@@ -1,0 +1,347 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.ico">
+    <title>Prioritize Work</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js" integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="todo.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" integrity="sha512-ELV+xyi8IhEApPS/pSj66+Jiw+sOT1Mqkzlh8ExXihe4zfqbWkxPRi8wptXIO9g73FSlhmquFlUOuMSoXz5IRw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!--https://getbootstrap.com/docs/5.0/getting-started/download/-->
+
+    <style>
+        .itemLightGrey {
+            background-color: lightgray !important;
+        }
+
+        .itemOrange {
+            background-color: orange !important;
+        }
+
+        .itemLightGreen {
+            background-color: lightgreen !important;
+        }
+
+        .itemFollowUp {
+            background-color: lightyellow !important;
+        }
+
+        .taskListItem {
+            height: 30px;
+            background-color: rgb(255, 255, 255);
+            border-radius: 3px;
+            text-align: left !important;
+            display: grid;
+            grid-template-columns: 24px 70px auto 122px;
+            -webkit-box-align: center;
+            align-items: center;
+            column-gap: 5px;
+            margin-left: 2px;
+            min-width: 0px;
+        }
+
+        .ui-dialog-titlebar {
+            background-color: #c2c2c2;
+        }
+
+        .ui-dialog .ui-dialog-titlebar-close {
+            background-image: url(https://cdnjs.cloudflare.com/ajax/libs/aui/6.0.1/aui/css/icons/aui-icon-close.png);
+            z-index: 999999;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom">
+                <select id="ddlArea" onchange="SwitchStorage();" class="d-flex align-items-center text-dark text-decoration-none">
+                    <option value="vlTasks_General"> General  </option>
+                    <option value="vlTasks_Project1"> Project 1  </option>
+                </select>
+                <select id="ddlTaskTypes" onchange="printMatrix();" style="margin-left:20px;" class="d-flex align-items-center text-dark text-decoration-none">
+                    <option value="showOnlyMyTasks"> Show Mine  </option>
+                    <option value="showAll"> Show All </option>
+                    <option value="showToBeFollowedUp"> Only Follow Up  </option>
+                </select>
+                <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
+                    <a style="margin-left:5px;margin-right:5px;" class="py-2 text-dark text-decoration-none" href="#">
+                        Hours:{  <span id=spanTotalHours>
+                        </span> } |
+                    </a>
+                    <a style="margin-left:5px;margin-right:5px;" class="py-2 text-dark text-decoration-none" href="#">
+                        Tasks: {  <span id=spanTotalCount>
+                        </span> } |
+                    </a>
+                    <a style="margin-left:5px;margin-right:5px;" class="py-2 text-dark text-decoration-none" href="#">
+                        Follow: {  <span id=spanTotalCountFollowups>
+                        </span> }
+                    </a>
+                    &nbsp;  &nbsp;
+                    <a style="margin-left:5px;margin-right:5px;" class="py-2 text-dark text-decoration-none" href="#" id="downloadAnchorElem" onclick="return downloadCompleteData();" title="Download/Export all tasks">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-cloud-download-fill" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 0a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 4.095 0 5.555 0 7.318 0 9.366 1.708 11 3.781 11H7.5V5.5a.5.5 0 0 1 1 0V11h4.188C14.502 11 16 9.57 16 7.773c0-1.636-1.242-2.969-2.834-3.194C12.923 1.999 10.69 0 8 0zm-.354 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V11h-1v3.293l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z" />
+                        </svg>
+                    </a>
+                    &nbsp;  &nbsp;
+                    <a id="downloadAnchorElemDummy" style="display:none;" />
+                    &nbsp;  &nbsp;
+                    <a style="margin-left:5px;margin-right:5px;" class="py-2 text-dark text-decoration-none" href="#" onclick="return OpenMenu();" title="Import tasks">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+                            <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
+                            <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z" />
+                        </svg>
+                    </a>
+
+                    &nbsp;  &nbsp;
+                    <a style="margin-left:5px;margin-right:5px;" class="py-2 text-dark text-decoration-none" href="#" onclick="return OpenAboutMatrix();" title="About this project & Eisenhower Matrix">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-patch-question-fill" viewBox="0 0 16 16">
+                            <path d="M5.933.87a2.89 2.89 0 0 1 4.134 0l.622.638.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01.622-.636zM7.002 11a1 1 0 1 0 2 0 1 1 0 0 0-2 0zm1.602-2.027c.04-.534.198-.815.846-1.26.674-.475 1.05-1.09 1.05-1.986 0-1.325-.92-2.227-2.262-2.227-1.02 0-1.792.492-2.1 1.29A1.71 1.71 0 0 0 6 5.48c0 .393.203.64.545.64.272 0 .455-.147.564-.51.158-.592.525-.915 1.074-.915.61 0 1.03.446 1.03 1.084 0 .563-.208.885-.822 1.325-.619.433-.926.914-.926 1.64v.111c0 .428.208.745.585.745.336 0 .504-.24.554-.627z" />
+                        </svg>
+                    </a>
+                </nav>
+            </div>
+        </header>
+        <main>
+            <div class="row">
+                <div class="col">
+                    <div class="card mb-6 rounded-3 shadow-sm">
+                        <div class="card-header py-3" style="background-color: rgb(7, 183, 74)">
+                            <h6 class="my-0 fw-normal">Important-Urgent [Do It Now] (Q1) ( <span id=spanUI></span> )</h6>
+                            <input type=text id="txtIU" onblur="addTask('txtIU','IU');" class="form-control" style="margin-top:5px;">
+                        </div>
+                        <div class="card-body" style="background-color: rgb(229, 247, 237);">
+                            <ul id="ulIU" class="list-group" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card mb-6 rounded-3 shadow-sm">
+                        <div class="card-header py-3" style="background-color: rgb(27, 97, 237);">
+                            <h6 class="my-0 fw-normal"> Important-Not Urgent [Schedule] (Q2) ( <span id=spanINU></span> )</h6>
+                            <input type=text id="txtINU" onblur="addTask('txtINU','INU');" class="form-control" style="margin-top:5px;">
+                        </div>
+                        <div class="card-body" style="background-color: rgb(231, 239, 253);">
+                            <ul id="ulINU" class="list-group" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top:5px;">
+                <div class="col">
+                    <div class="card mb-6 rounded-3 shadow-sm">
+                        <div class="card-header py-3" style="background-color: rgb(244, 165, 31);">
+                            <h6 class="my-0 fw-normal"> Not Important-Urgent [Delegate]  ( <span id=spanUNI></span> )</h6>
+                            <input type=text id="txtNIU" onblur="addTask('txtNIU','NIU');" class="form-control" style="margin-top:5px;">
+                        </div>
+                        <div class="card-body" style="background: rgb(254, 250, 244);">
+                            <ul id="ulNIU" class="list-group" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card mb-6 rounded-3 shadow-sm">
+                        <div class="card-header py-3" style="background-color: rgb(237, 65, 27);">
+                            <h6 class="my-0 fw-normal"> Not Important-Not Urgent[Delete]  ( <span id=spanNINU></span> )</h6>
+                            <input type=text id="txtNINU" onblur="addTask('txtNINU','NINU');" class="form-control" style="margin-top:5px;">
+                        </div>
+                        <div class="card-body" style="background: rgb(254, 245, 243);">
+                            <ul id="ulNINU" class="list-group" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="divTaskDetails" style="display:none;">
+        <div class="row">
+            <div class="col-lg-1">
+                Title:
+            </div>
+            <div class="col-lg-11" style="cursor:pointer;">
+                <h5 id="h4TaskName" contenteditable="true" onblur="EditTaskContent('name','h4TaskName');"> </h5>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-1">
+                Details:
+            </div>
+            <div class="col-lg-11" style="cursor:pointer;">
+                <h6 id="h5Description" contenteditable="true" onblur="EditTaskContent('description','h5Description');"> </h6>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card" onclick="ChangeTaskQ('IU')" style="background-color: rgb(153, 255, 102);cursor:pointer;   ">
+                    <div class="card-body">
+                        Important & Urgent [DO IT NOW]
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card" onclick="ChangeTaskQ('INU')" style="background-color: rgb(153, 204, 255);cursor:pointer;">
+                    <div class="card-body">
+                        Important & Not Urgent [SCHEDULE]
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:5px;">
+            <div class="col-sm-6">
+                <div class="card" onclick="ChangeTaskQ('NIU')" style="background-color: rgb(255, 204, 255); cursor:pointer;">
+                    <div class="card-body">
+                        Not Important & Urgent [DELEGATE]
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card" onclick="ChangeTaskQ('NINU')" style="background-color: rgb(255, 102, 255);cursor:pointer;">
+                    <div class="card-body">
+                        Not Important & Not Urgent
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:5px;">
+            <input type=hidden Id=selecedTaskId>
+            <div class="col-sm-1">
+                <button id="btnLinkInTaskDetails" class="btn btn-outline-primary" onclick="openLink();">View</button>
+            </div>
+            <div class="col-sm-3">
+                <button id="btnAddToFollowUp" class="btn btn-outline-primary" onclick="return EditTaskContent('addtofollowup',null);"> Add To Follow Up</button>
+                <button id="btnUnollowUp" class="btn btn-outline-secondary" onclick="return EditTaskContent('unfollow',null);"> UnFollow</button>
+            </div>
+            <div class="col-sm-3">
+                <button id="btnAddToOnHold" class="btn btn-outline-success" onclick="return EditTaskContent('addtoonhold',null);"> Keep On Hold</button>
+                <button id="btnRemoveFromOnHold" class="btn btn-outline-info" onclick="return EditTaskContent('removefromonhold',null);"> Remove from On Hold</button>
+            </div>
+            <div class="col-sm-5">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="">Estimates:</span>
+                    </div>
+                    <input type=text size=5 id="txtEstimates" onblur="ChangeTaskEstimates()" />
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="">Hours</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin:5px;font-size:small;">
+            <div class="col-lg-12">
+                <h6>Instructions</h6>
+                <ul>
+                    <li>To Change quadrant click on desired quadrant. e.g. If your task is in "Important and urgent" and you want to move it to "Not important not urgent"; click on "Not important not urgent" box above.</li>
+                    <li>Click on heading to edit task name</li>
+                    <li>Click on description to edit task name</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="divUtility">
+        <div class="row">
+            <div class="col-lg-6">
+                <textarea name=txtJSONData id=txtJSONData cols=50 rows="7"> </textarea>
+                <br />
+                <span> Open exported JSON file in notepad. Copy all and paste here.</span>
+                <input type="Button" onclick="return ReadAndSetJSON();" value="Import Tasks" class="btn btn-info">
+            </div>
+
+            <div class="col-lg-6">
+                <input type="Button" onclick="return clearStorage();" value="Clear All" class="btn btn-danger">
+                <br />
+                <br />
+                <span> Note: "Clear All": Deletes all tasks. </span>
+            </div>
+        </div>       
+    </div>
+
+    <div class="row" id="divAbout">
+        <div class="row">
+            <div class="col-lg-6">
+                <p>
+                    As per Wikipedia -  The "Eisenhower Method"[11] or "Eisenhower Principle" is a method that utilizes the principles
+                    of importance and urgency to organize priorities and workload. This method stems from a quote attributed to Dwight D. Eisenhower:
+                    "I have two kinds of problems, the urgent and the important. The urgent are not important, and the important are never
+                    urgent." Eisenhower did not claim this insight for his own, but attributed it to an (unnamed) "former college president.".
+                    <br />
+
+                    Priority matrix: Eisenhower Matrix, this is also known as Eisenhower Box, Eisenhower Decision Matrix, or Urgent-Important Matrix.
+                    This methodology helps to prioritize work based on urgency and importance/business value.
+                    It helps to determine important activities vs activities which may not need your attention at all.
+                    The brain behind the famous Eisenhower Box is <a  target="_blank"  href="https://en.wikipedia.org/wiki/Dwight_D._Eisenhower">Dwight D. Eisenhower. </a>                  
+                </p>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="card" style="background-color: rgb(153, 255, 102);">
+                            <div class="card-body">
+                                Important & Urgent [DO IT NOW]
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="card" style="background-color: rgb(153, 204, 255);">
+                            <div class="card-body">
+                                Important & Not Urgent [SCHEDULE]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:5px;">
+                    <div class="col-sm-6">
+                        <div class="card" style="background-color: rgb(255, 204, 255); ">
+                            <div class="card-body">
+                                Not Important & Urgent [DELEGATE]
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="card" style="background-color: rgb(255, 102, 255);">
+                            <div class="card-body">
+                                Not Important & Not Urgent
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <ul class="list-group" style="margin-top:20px;">
+                    <li class="list-group-item d-flex justify-content-between align-items-center" style="background-color: rgb(153, 255, 102);">
+                        First Quadrant  (upper left): urgent and important
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center" style="background-color: rgb(153, 204, 255);">
+                        Second Quadrant  (upper right): important, but not urgent
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center" style="background-color: rgb(255, 204, 255); ">
+                        Third Quadrant (lower left): not important, but urgent
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center" style="background-color: rgb(255, 102, 255);">
+                        Fourth Quadrant (lower right): neither important nor urgent
+                    </li>
+                </ul>               
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
