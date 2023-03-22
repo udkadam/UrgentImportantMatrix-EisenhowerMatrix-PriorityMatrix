@@ -101,6 +101,10 @@ function printMatrix() {
     //if (allTasksFromLocalStorage != null) {
     //    console.log("Total Tasks - " + allTasksFromLocalStorage.queue.length);
     console.log("Matrix Print started");
+	
+	if(allTasksFromLocalStorage != null && allTasksFromLocalStorage != undefined && allTasksFromLocalStorage.queue != null && allTasksFromLocalStorage.queue != undefined)
+	{	
+
     for (var i = 0; i < allTasksFromLocalStorage.queue.length; i++) {
 
         var vTask = allTasksFromLocalStorage.queue[i];
@@ -132,23 +136,36 @@ function printMatrix() {
     }
 
 
-    $("#spanUI").text($("#ulIU").find("li").length);
-    $("#spanUNI").text($("#ulNIU").find("li").length);
-    $("#spanINU").text($("#ulINU").find("li").length);
-    $("#spanNINU").text($("#ulNINU").find("li").length);
-    $("#spanFU").text($("#ulFU").find("li").length);
+		$("#spanUI").text($("#ulIU").find("li").length);
+		$("#spanUNI").text($("#ulNIU").find("li").length);
+		$("#spanINU").text($("#ulINU").find("li").length);
+		$("#spanNINU").text($("#ulNINU").find("li").length);
+		$("#spanFU").text($("#ulFU").find("li").length);
 
 
-    $("#spanTotalCount").text($("#ulIU").find("li").length +
-        $("#ulNIU").find("li").length + $("#ulINU").find("li").length + $("#ulNINU").find("li").length
-    );
+		$("#spanTotalCount").text($("#ulIU").find("li").length +
+		$("#ulNIU").find("li").length + $("#ulINU").find("li").length + $("#ulNINU").find("li").length
+		);
 
-    //console.log("totalTasksHours Outside:" + totalTasksHours);
-    $("#spanTotalHours").text(totalTasksHours);
 
-    $("#spanTotalCountFollowups").text($("#ulFU").find("li").length);
+		$("#spanTotalHours").text(totalTasksHours);
 
-  //  console.log("Matrix Print completed");
+		$("#spanTotalCountFollowups").text($("#ulFU").find("li").length);
+	}
+	else
+	{
+		$("#spanUI").text("0");
+		$("#spanUNI").text("0");
+		$("#spanINU").text("0");
+		$("#spanNINU").text("0");
+		$("#spanFU").text("0");
+
+
+		$("#spanTotalCount").text("0");
+		$("#spanTotalHours").text("0");
+
+		$("#spanTotalCountFollowups").text("0");
+	}
 }
 
 function popIt() {
